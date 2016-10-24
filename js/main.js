@@ -1065,12 +1065,10 @@ var createDateControls = function createDateControls(container, theChart) {
 //
 // ]
 var normalizeData = function normalizeData(data) {
-<<<<<<< HEAD
     if (typeof data == "string") {
-	JSON.parse(data);
+	data = JSON.parse(data);
     }
-=======
->>>>>>> 34bf5890c4f2b7c2744c59bf8fbf3a7c37d5b7ff
+
     var normalized_data = [{}];
 
     for (var i in data) {
@@ -1183,7 +1181,7 @@ var config = function config() {
     MashupPlatform.widget.context.registerCallback(handleResize);
 
     // Paint
-    normalizeData(test);
+    //normalizeData(test);
 }
 
 var handleResize = function handleResize(new_values) {
