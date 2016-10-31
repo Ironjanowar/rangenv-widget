@@ -41,16 +41,17 @@ var paint = function paint(data) {
 
     // Creates the svg
     var element = $("#fixed-chart");
-    element.append('<svg class="blurable"></svg>');
+    element.append('<svg id="chart" class="blurable"></svg>');
     svg = element.children("svg");
     svg_global = svg;
     var svg_width = window.innerWidth - (svg_global[0].getBBox().y * 2) // window.innerWidth - left*2
-    $("svg").css({top: "10%", left: "5%", right: "20px", margin: {left: "5%", right: "5%"}, position:'absolute'});
+    $("svg").css({top: "10%", left: "5%", right: "5%", margin: {left: "5%", right: "5%"}, position:'absolute'});
     svg.get(0).style.height = dimensions.height;
     svg.get(0).style.width = dimensions.width;
     //svg.get(0).style.minHeight = "240px";
     //svg.get(0).style.minWidth = "1000px";
     svg.get(0).style.backgroundColor = "rgba(0,0,0,0)";
+    d3.select("#chart").classed("svg-content-responsive", true);
 
     nv.addGraph(function() {
 
