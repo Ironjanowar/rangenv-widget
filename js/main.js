@@ -241,12 +241,12 @@ MyCustomChart = function() {
         tooltip = nv.models.tooltip(),
         interactiveLayer = nv.interactiveGuideline();
 
-    var chart_width = window.innerWidth - 100 - 200*2 // window.innerWidth - top - left*2
+    // var chart_width = window.innerWidth - 100 - 200*2 // window.innerWidth - top - left*2
 
     var margin = {top: 30, right: 30, bottom: 30, left: 60},
         margin2 = {top: 0, right: 30, bottom: 20, left: 60},
         color = nv.utils.defaultColor(),
-        width = chart_width,
+        width = null,
         height = null,
         height2 = 50,
         useInteractiveGuideline = false,
@@ -923,7 +923,6 @@ var createDateControls = function createDateControls(container, theChart) {
         // Go back
         var newLeftDiv = document.createElement('div');
         var leftIco = document.createElement('i');
-        leftIco.append('Left');
         $(leftIco).addClass("fa fa-angle-double-left");
         $(newLeftDiv).addClass('extraButton goBack');
         newLeftDiv.appendChild(leftIco);
@@ -935,7 +934,6 @@ var createDateControls = function createDateControls(container, theChart) {
         // Go next
         var newRightDiv = document.createElement('div');
         var rightIco = document.createElement('i');
-        rightIco.append('Right')
         $(rightIco).addClass("fa fa-angle-double-right");
         $(newRightDiv).addClass('extraButton goNext');
         newRightDiv.appendChild(rightIco);
