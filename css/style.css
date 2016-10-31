@@ -1,7 +1,7 @@
 .rangeControls {
     position: absolute;
     top: 0;
-    right: 37px;
+    left: 37px;
     margin-top: 2px;
 }
 
@@ -106,4 +106,8 @@
   float: right;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
+}
+
+text {
+  user-select: none;
 }

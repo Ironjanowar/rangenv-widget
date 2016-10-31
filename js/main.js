@@ -5,7 +5,7 @@ var firstLoad = true;
 var dataSet = [];
 var dimensions = {
     height: "250px",
-    width: "1010px"
+    width: "100%"
 }
 var window_dimensions = {};
 
@@ -44,12 +44,11 @@ var paint = function paint(data) {
     element.append('<svg id="chart" class="blurable"></svg>');
     svg = element.children("svg");
     svg_global = svg;
-    var svg_width = window.innerWidth - (svg_global[0].getBBox().y * 2) // window.innerWidth - left*2
-    $("svg").css({top: "10%", left: "5%", right: "5%", margin: {left: "5%", right: "5%"}, position:'absolute'});
+    $("svg").css({ top: "10%", width: "100%", margin: {left: "5%", right: "5%"}, position:'absolute'});
     svg.get(0).style.height = dimensions.height;
     svg.get(0).style.width = dimensions.width;
-    //svg.get(0).style.minHeight = "240px";
-    //svg.get(0).style.minWidth = "1000px";
+    svg.get(0).style.minHeight = "240px";
+    svg.get(0).style.minWidth = "1000px";
     svg.get(0).style.backgroundColor = "rgba(0,0,0,0)";
     d3.select("#chart").classed("svg-content-responsive", true);
 
@@ -61,7 +60,7 @@ var paint = function paint(data) {
 
         // By the moment taking default params
         var chart = MyCustomChart()
-            .focusHeight(240*0.5)
+            .focusHeight(240*0.8)
             .interpolate("linear")
             .color(undefined)
             .duration(250)
@@ -175,9 +174,9 @@ var paint = function paint(data) {
 // Extract a center range of an array (modifies the array)
 var extractRange = function extractRange(range, arr) {
     for (var i in arr) {
-	if (arr[i].x < range[0] || arr[i].x > range[1]) {
-	    delete arr[i];
-	}
+        if (arr[i].x < range[0] || arr[i].x > range[1]) {
+            delete arr[i];
+        }
     }
 
     return arr;
@@ -230,6 +229,8 @@ MyCustomChart = function() {
     //============================================================
     // Public Variables with Default Settings
     //------------------------------------------------------------
+
+
 
     var lines = nv.models.line(),
         lines2 = nv.models.line(),
@@ -378,7 +379,7 @@ MyCustomChart = function() {
                 }
 
                 g.select('.nv-legendWrap')
-                    .attr('transform', 'translate(0,' + (-margin.top) +')')
+                    .attr('transform', 'translate(0, -24)')
             }
 
             wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
@@ -424,7 +425,7 @@ MyCustomChart = function() {
                 );
 
             g.select('.nv-context')
-                .attr('transform', 'translate(0,' + ( availableHeight1 + margin.bottom + margin2.top) + ')')
+                .attr('transform', 'translate(0, 24)')
 
             var contextLinesWrap = g.select('.nv-context .nv-linesWrap')
                 .datum(data.filter(function(d) { return !d.disabled }))
@@ -672,10 +673,10 @@ MyCustomChart = function() {
                         //lastExtent = nExtent;
                         dispatch.brush({extent: nExtent, brush: brush});
                         updateBrushBG();
-			var newArray = jQuery.extend(true, {}, dataSet[0].values);
-			var arrayToSend = extractRange(nExtent, newArray);
-			var dataToSend = { values: arrayToSend, key: dataSet[0].key, area: dataSet[0].area };
-			MashupPlatform.wiring.pushEvent("outputData", JSON.stringify(dataToSend));
+                        var newArray = jQuery.extend(true, {}, dataSet[0].values);
+                        var arrayToSend = extractRange(nExtent, newArray);
+                        var dataToSend = { values: arrayToSend, key: dataSet[0].key, area: dataSet[0].area };
+                        MashupPlatform.wiring.pushEvent("outputData", JSON.stringify(dataToSend));
                     } else {
                         console.log("discarding extent: " + nExtent);
                     }
@@ -861,10 +862,10 @@ var createDateControls = function createDateControls(container, theChart) {
         var lastWeekDiv = document.createElement('div');
         lastWeekDiv.addEventListener('click', function() {
             chart.update();
-            buttonMode = true;
             currentControlPosition = 0;
             destroyLeftRightControls('week');
             addLeftRightControls.call(this, lastWeekDiv, 'week');
+            buttonMode = true;
             theChart.setNewExtent.call(this, weekRange);
         }.bind(this));
         $(lastWeekDiv).addClass('rangeButt weekRange');
@@ -881,11 +882,11 @@ var createDateControls = function createDateControls(container, theChart) {
         var lastMonthDiv = document.createElement('div');
         lastMonthDiv.addEventListener('click', function () {
             chart.update();
-            buttonMode = true;
             currentControlPosition = 0;
+            theChart.setNewExtent.call(this, monthRange);
             destroyLeftRightControls('month');
             addLeftRightControls.call(this, lastMonthDiv, 'month');
-            theChart.setNewExtent.call(this, monthRange);
+            buttonMode = true;
         }.bind(this));
         $(lastMonthDiv).addClass('rangeButt month');
         $(lastMonthDiv).text('month');
@@ -902,10 +903,10 @@ var createDateControls = function createDateControls(container, theChart) {
         lastYearDiv.addEventListener('click', function () {
             chart.update()
             currentControlPosition = 0;
-            buttonMode = true;
             theChart.setNewExtent.call(this, yearRange);
             destroyLeftRightControls('year');
             addLeftRightControls.call(this, lastYearDiv, 'year');
+            buttonMode = true;
         }.bind(this));
         $(lastYearDiv).addClass('rangeButt lastYear');
         $(lastYearDiv).text('year');
@@ -1065,7 +1066,7 @@ var createDateControls = function createDateControls(container, theChart) {
 // ]
 var normalizeData = function normalizeData(data) {
     if (typeof data == "string") {
-	data = JSON.parse(data);
+        data = JSON.parse(data);
     }
 
     var normalized_data = [{}];
