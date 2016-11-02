@@ -7,7 +7,11 @@ var dimensions = {
     height: "250px",
     width: "100%"
 }
-var window_dimensions = {};
+var window_dimensions = {
+    height: $(window).height()
+};
+
+var status = 0;
 
 var test_data = [
     {
@@ -43,9 +47,9 @@ var paint = function paint(data) {
     var element = $("#fixed-chart");
     element.append('<svg id="chart" class="blurable"></svg>');
     svg = element.children("svg");
-    svg_global = svg;
     $("svg").css({ top: "10%", width: "100%", margin: {left: "5%", right: "5%"}, position:'absolute'});
-    svg.get(0).style.height = dimensions.height;
+    var height_svg = 0.90 * $(window).height() > 240 ? 0.90 * $(window).height() : 250;
+    svg.get(0).style.height = height_svg;
     svg.get(0).style.width = dimensions.width;
     svg.get(0).style.minHeight = "240px";
     svg.get(0).style.minWidth = "1000px";
@@ -54,13 +58,15 @@ var paint = function paint(data) {
 
     nv.addGraph(function() {
 
-        if(this.status != 0) {
+        if(status != 0) {
             return; //Already initialized or destroyed
         }
 
+	var dynamic_height = $($("svg").get(0)).height() * 0.69 > 240*0.8 ? $($("svg").get(0)).height() * 0.69 : 240*0.8;
+	
         // By the moment taking default params
         var chart = MyCustomChart()
-            .focusHeight(240*0.8)
+            .focusHeight(dynamic_height) // 240 * 0.8
             .interpolate("linear")
             .color(undefined)
             .duration(250)
@@ -161,7 +167,7 @@ var paint = function paint(data) {
         chart.update();
 
         // Set the chart as ready
-        this.status = 1;
+        status = 1;
 
         createDateControls.call(this, element, chart);
 
@@ -1185,25 +1191,17 @@ var config = function config() {
 }
 
 var handleResize = function handleResize(new_values) {
-    var toUpdate = false;
-
-    if ('heightInPixels' in new_values && Math.abs(window_dimensions.height - new_values.heightInPixels) > 10) {
-        height = MashupPlatform.widget.context.get('heightInPixels');
-        $("svg").setAttribute("height", height);
-        toUpdate = true;
+    if ('heightInPixels' in new_values && new_values.heightInPixels < 240*0.8) {
+	return;
     }
-
-    if ('widthInPixels' in new_values && Math.abs(window_dimensions.width - new_values.widthInPixels) > 10) {
-        w = MashupPlatform.widget.context.get('widthInPixels');
-        $("svg").setAttribute("width", width);
-        toUpdate = true;
-    }
-
-    if (toUpdate) {
+    
+    if ('heightInPixels' in new_values && Math.abs(window_dimensions.height - new_values.heightInPixels) > 20) {
         console.log("Updating...")
-        d3.select("#fixed-chart svg").remove();
+	window_dimensions.height = new_values.heightInPixels;
+        d3.select("#chart").remove();
+	d3.select(".rangeControls").remove();
+	status = 0;
         paint(dataSet);
-        toUpdate = false;
     }
 }
 
