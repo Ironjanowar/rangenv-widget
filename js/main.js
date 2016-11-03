@@ -38,8 +38,6 @@ var test_data = [
 // ]
 var paint = function paint(data) {
 
-    this.data = data;
-
     window_dimensions.height = $(window).height();
     window_dimensions.width = $(window).width();
 
@@ -62,8 +60,8 @@ var paint = function paint(data) {
             return; //Already initialized or destroyed
         }
 
-	var dynamic_height = $($("svg").get(0)).height() * 0.69 > 240*0.8 ? $($("svg").get(0)).height() * 0.69 : 240*0.8;
-	
+        var dynamic_height = $($("svg").get(0)).height() * 0.69 > 240*0.8 ? $($("svg").get(0)).height() * 0.69 : 240*0.8;
+
         // By the moment taking default params
         var chart = MyCustomChart()
             .focusHeight(dynamic_height) // 240 * 0.8
@@ -178,14 +176,16 @@ var paint = function paint(data) {
 // int range: [from, to]
 // arr: [ . . . ]
 // Extract a center range of an array (modifies the array)
-var extractRange = function extractRange(range, arr) {
-    for (var i in arr) {
-        if (arr[i].x < range[0] || arr[i].x > range[1]) {
-            delete arr[i];
+var extractRange = function extractRange(range, dataset_obj) {
+    var toReturn = [];
+    for (var i = 0; i < dataset_obj.length; i++) {
+        if (dataset_obj[i].x > range[0] && dataset_obj[i].x < range[1]) {
+	    var toPush = {x: dataset_obj[i].x, y: dataset_obj[i].y};
+            toReturn.push(toPush);
         }
     }
 
-    return arr;
+    return toReturn;
 }
 
 // Test
@@ -678,9 +678,11 @@ MyCustomChart = function() {
                     if (nExtent != null && lastExtent != null && (nExtent[0] !== lastExtent[0] || nExtent[1] !== lastExtent[1] || fromPaint)) {
                         //lastExtent = nExtent;
                         dispatch.brush({extent: nExtent, brush: brush});
-                        updateBrushBG();
-                        var newArray = jQuery.extend(true, {}, dataSet[0].values);
-                        var arrayToSend = extractRange(nExtent, newArray);
+                        updateBrushBG();                       
+                        var array = extractRange(nExtent, dataSet[0].values);
+                        var arrayToSend = $.map(array, function(value, index) {
+                            return [value];
+                        });
                         var dataToSend = { values: arrayToSend, key: dataSet[0].key, area: dataSet[0].area };
                         MashupPlatform.wiring.pushEvent("outputData", JSON.stringify(dataToSend));
                     } else {
@@ -1192,15 +1194,15 @@ var config = function config() {
 
 var handleResize = function handleResize(new_values) {
     if ('heightInPixels' in new_values && new_values.heightInPixels < 240*0.8) {
-	return;
+        return;
     }
-    
+
     if ('heightInPixels' in new_values && Math.abs(window_dimensions.height - new_values.heightInPixels) > 20) {
         console.log("Updating...")
-	window_dimensions.height = new_values.heightInPixels;
+        window_dimensions.height = new_values.heightInPixels;
         d3.select("#chart").remove();
-	d3.select(".rangeControls").remove();
-	status = 0;
+        d3.select(".rangeControls").remove();
+        status = 0;
         paint(dataSet);
     }
 }
