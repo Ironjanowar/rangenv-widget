@@ -1,9 +1,3 @@
-  - Configuracion
-  - Datos de entrada
-  - Datos de salida
-  - Formato de datos
-
-
 * Rangenv Chart
 The Rangenv Chart widget is a WireCloud widget that lets you visualize
 data along a date time and select a time range from it.
