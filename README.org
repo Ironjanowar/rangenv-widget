@@ -27,8 +27,8 @@ No settings
   - values :: Data you want to display in the chart.
   - key :: Name is going to appear in the legend.
   - interval :: Interval of time to display the data.
-    + data_begin, from :: Starting date of the interval.
-    + data_end, to :: Ending date of the interval.
+    + - data_begin, from :: Starting date of the interval.
+    + - data_end, to :: Ending date of the interval.
 
 ** Output endpoint
   - outputData: Sends formated data of the zone selected in the
@@ -55,6 +55,6 @@ No settings
 #+END_SRC
 
   - values :: List of formated values.
-    + x :: Date related to the value.
-    + y :: Value.
+    + - x :: Date related to the value.
+    + - y :: Value.
   - key :: Lavel of the graph.
