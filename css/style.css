@@ -23,6 +23,7 @@
   background: rgba(0, 76, 139, 0.64);
   cursor: pointer;
   border-radius: 5px;
+  user-select: none;
 }
 
 .rangeButt.on{
