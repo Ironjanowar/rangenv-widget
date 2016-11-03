@@ -58,4 +58,4 @@ No settings
   - key :: Lavel of the graph.
 
 * DEMO
-[Click here to see the demo](https://youtu.be/bxd9hfephaU)
+[[Click here to see the demo][https://youtu.be/bxd9hfephaU]]
