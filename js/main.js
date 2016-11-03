@@ -683,7 +683,7 @@ MyCustomChart = function() {
                         var arrayToSend = $.map(array, function(value, index) {
                             return [value];
                         });
-                        var dataToSend = { values: arrayToSend, key: dataSet[0].key, area: dataSet[0].area };
+                        var dataToSend = { values: arrayToSend, key: dataSet[0].key };
                         MashupPlatform.wiring.pushEvent("outputData", JSON.stringify(dataToSend));
                     } else {
                         console.log("discarding extent: " + nExtent);
